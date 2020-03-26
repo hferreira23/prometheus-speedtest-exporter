@@ -11,7 +11,7 @@ This was done on an Ubuntu 20.04 on arm64 but any linux env should be fine.
 
 ## Components
 
-This is a 3 piece exporter:
+This is a 4 piece exporter:
 
 - The offical cli from Speedtest.net
 
@@ -33,4 +33,24 @@ sudo apt-get install speedtest
 ```
 - speedtest-exporter.sh
 
-An adaptation of @pawadski script described [here] (https://apawel.me/exporting-prometheus-metrics-with-bash-scripts/)
+A bash script adapted from [@pawadski](https://gitlab.com/pawadski) script described [here](https://apawel.me/exporting-prometheus-metrics-with-bash-scripts/). It basically runs the speedtest client and outputs to stdout in prometheus metric syntax.
+
+- script_exporter
+
+A go webserver made by [@ricoberger](https://github.com/ricoberger) which exportes bash scripts for Prometheus.
+
+The script_explorer binary in my repo was built for arm64 but if another arch is needed the source code can be found on Rico's [repo](https://github.com/ricoberger/script_exporter) along with instructions on how to build it.
+
+The script_exporter loads its config from the config.yaml. Adapt to your scenario accordantly.
+
+- systemd file service file
+
+Self explanatory. Systemd service file to start/stop/restart the exporter.
+
+## Puting it all together
+
+1. Install speedtest client using instructions above
+1. Deploy the sppedtest-exporter.sh and script_exporter to a directory of your choosing (it's easier if the directory is by default on the $PATH of all users). I used:
+```
+/usr/local/bin
+```
