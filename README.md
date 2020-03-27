@@ -41,7 +41,7 @@ A go webserver made by [@ricoberger](https://github.com/ricoberger) which export
 
 The script_explorer binary in my repo was built for arm64 but if another arch is needed the source code can be found on Rico's [repo](https://github.com/ricoberger/script_exporter) along with instructions on how to build it.
 
-The script_exporter loads its config from the config.yaml. Adapt to your scenario accordantly.
+The script_exporter loads its config from the config.yaml. Adapt to your scenario accordantly. By default runs on port 9469.
 
 - systemd file service file
 
@@ -49,8 +49,38 @@ Self explanatory. Systemd service file to start/stop/restart the exporter.
 
 ## Puting it all together
 
-1. Install speedtest client using instructions above
-1. Deploy the sppedtest-exporter.sh and script_exporter to a directory of your choosing (it's easier if the directory is by default on the $PATH of all users). I used:
+* Install speedtest client using instructions above
+
+* Deploy the speedtest-exporter.sh and script_exporter to a directory of your choosing (it's easier if the directory is by default on the $PATH of all users). I used:
 ```
 /usr/local/bin
 ```
+
+* Deploy the systemctl service file to:
+```
+/etc/systemd/system
+```
+
+* Add relevant config to prometheus.yml. Example:
+```
+  - job_name: 'Speedtest'
+    scrape_interval: 30m
+    scrape_timeout: 1m
+    metrics_path: /probe
+    params:
+      script: [speedtest]
+    static_configs:    
+      - targets:
+        - 192.168.1.2:9469
+```
+
+* Enable and start the service
+```
+systemctl daemon-reload
+systemctl enable speedtest-exporter.service
+systemctl start speedtest-exporter.service
+```
+
+* Restart Prometheus to reload new config
+
+## Grafana
