@@ -98,6 +98,7 @@ For those o use Ansible I added the role to setup all of this (with the exceptio
 speedtest-exporter.sh
 script-exporter
 speedtest-exporter.service
+config.yaml
 ```
 
 to the files directory inside the role
