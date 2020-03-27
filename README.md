@@ -17,6 +17,8 @@ This is a 4 piece exporter:
 
 **Instalation intructions:**
 
+(Note: If the Ubuntu version is not listed on the supported ones use bionic as a reference)
+
 ```
 sudo apt-get install gnupg1 apt-transport-https dirmngr
 export INSTALL_KEY=379CE192D401AB61
@@ -84,3 +86,18 @@ systemctl start speedtest-exporter.service
 * Restart Prometheus to reload new config
 
 ## Grafana
+
+My grafana dashboard is available [here](https://grafana.com/grafana/dashboards/11988/)
+
+Or the speedtest-exporter.json present in this repo can be used instead.
+
+## Ansible
+
+For those o use Ansible I added the role to setup all of this (with the exception of prometheus and Grafana dashboard). Just copy/move:
+```
+speedtest-exporter.sh
+script-exporter
+speedtest-exporter.service
+```
+
+to the files directory inside the role
