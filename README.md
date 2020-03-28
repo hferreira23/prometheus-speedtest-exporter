@@ -37,15 +37,36 @@ sudo apt-get install speedtest
 
 A bash script adapted from [@pawadski](https://gitlab.com/pawadski) script described [here](https://apawel.me/exporting-prometheus-metrics-with-bash-scripts/). It basically runs the speedtest client and outputs to stdout in prometheus metric syntax.
 
-- script_exporter
+- speedtest_exporter
 
 A go webserver made by [@ricoberger](https://github.com/ricoberger) which exportes bash scripts for Prometheus.
 
 The script_explorer binary in my repo was built for arm64 but if another arch is needed the source code can be found on Rico's [repo](https://github.com/ricoberger/script_exporter) along with instructions on how to build it.
 
-The script_exporter loads its config from the config.yaml. Adapt to your scenario accordantly. By default runs on port 9469.
+The script_exporter loads its config from the config.yml. Adapt to your scenario accordantly. By default runs on port 9469.
 
-- systemd file service file
+config.yml example:
+```
+tls:
+  enabled: false
+  crt: server.crt
+  key: server.key
+
+basicAuth:
+  enabled: false
+  username: admin
+  password: admin
+
+bearerAuth:
+  enabled: false
+  signingKey: my_secret_key
+
+scripts:
+  - name: speedtest
+    script: ./speedtest-exporter.sh
+```
+
+- speedtest_exporter.service (systemd file service file)
 
 Self explanatory. Systemd service file to start/stop/restart the exporter.
 
@@ -55,12 +76,18 @@ Self explanatory. Systemd service file to start/stop/restart the exporter.
 
 * Deploy the speedtest-exporter.sh and script_exporter to a directory of your choosing (it's easier if the directory is by default on the $PATH of all users). I used:
 ```
-/usr/local/bin
+/usr/local/bin/speedtest-exporter.sh
+/usr/local/bin/speedtest_exporter
+```
+
+* Deploy config.yml to a diretory of your choosing (make sure the systemd service reflets that change). I used:
+```
+/etc/speedtest_exporter/config.yml
 ```
 
 * Deploy the systemctl service file to:
 ```
-/etc/systemd/system
+/etc/systemd/system/speedtest_exporter.service
 ```
 
 * Add relevant config to prometheus.yml. Example:
@@ -93,12 +120,12 @@ Or the speedtest-exporter.json present in this repo can be used instead.
 
 ## Ansible
 
-For those o use Ansible I added the role to setup all of this (with the exception of prometheus and Grafana dashboard). Just copy/move:
+For those who use Ansible I added the role to setup all of this (with the exception of prometheus and Grafana dashboard). Just copy/move:
 ```
 speedtest-exporter.sh
-script-exporter
-speedtest-exporter.service
-config.yaml
+speedtest_exporter
+speedtest_exporter.service
+config.yml
 ```
 
-to the files directory inside the role
+to the files directory inside the role.
