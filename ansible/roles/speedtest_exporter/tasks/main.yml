@@ -1,0 +1,55 @@
+---
+- name: add Ookla Speedtest apt repo signing key
+  apt_key:
+    id: "{{ item }}"
+    keyserver: 'keyserver.ubuntu.com'
+    state: present
+  with_items:
+    - 379CE192D401AB61
+
+- name: setup Ookla Speedtest apt repository
+  apt_repository:
+    repo: "deb https://ookla.bintray.com/debian buster main"
+    filename: ookla-speedtest
+    update_cache: yes
+    state: present
+
+- name: Install Ookla speedtest-cli
+  apt:
+    name: speedtest
+    state: latest
+
+- name: Configure speedtest_exporter group
+  group:
+    name: speedtest_exporter
+    gid: 9469
+    state: present
+
+- name: Configure speedtest_exporter user
+  user:
+    name: speedtest_exporter
+    uid: 9469
+    state: present
+    system: yes
+
+- name: Create config directories if it does not exist
+  file:
+    path: '/etc/speedtest_exporter/'
+    state: directory
+    owner: speedtest_exporter
+    group: speedtest_exporter
+    mode: '0755'
+
+- name: Deploy speedtest_exporter files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: speedtest_exporter
+    group: speedtest_exporter
+    mode: "{{ item.mode }}"
+  with_items: 
+    - { src: 'config.yml', dest: '/etc/speedtest_exporter/', mode: '0644' }
+    - { src: 'speedtest-exporter.sh', dest: '/usr/local/bin/', mode: '0755' }
+    - { src: 'speedtest_exporter', dest: '/usr/local/bin/', mode: '0755' }
+    - { src: 'speedtest_exporter.service', dest: '/etc/systemd/system/', mode '0644' }
+  notify: "restart speedtest_exporter"

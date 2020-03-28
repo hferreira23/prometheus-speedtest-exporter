@@ -1,0 +1,8 @@
+---
+- name: systemd node_exporter
+  systemd:
+    name: speedtest_exporter
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  listen: "restart speedtest_exporter"
