@@ -1,4 +1,40 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "7.0.3"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -15,7 +51,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 13,
+  "id": null,
   "links": [],
   "panels": [
     {
@@ -47,8 +83,8 @@
           }
         ],
         "executionErrorState": "alerting",
-        "for": "5m",
-        "frequency": "1m",
+        "for": "1h",
+        "frequency": "30m",
         "handler": 1,
         "message": "Download Speed alert",
         "name": "SpeedTest - Downstream alert",
@@ -59,7 +95,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -139,6 +175,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:752",
           "decimals": null,
           "format": "bps",
           "label": "Speed",
@@ -148,6 +185,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:753",
           "format": "short",
           "label": "",
           "logBase": 1,
@@ -168,7 +206,7 @@
           {
             "evaluator": {
               "params": [
-                4000000
+                5000000
               ],
               "type": "lt"
             },
@@ -190,8 +228,8 @@
           }
         ],
         "executionErrorState": "alerting",
-        "for": "5m",
-        "frequency": "1m",
+        "for": "1h",
+        "frequency": "30m",
         "handler": 1,
         "message": "Speedtest upload alarm",
         "name": "Speedtest Upstream alert",
@@ -202,7 +240,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -256,7 +294,7 @@
           "fill": true,
           "line": true,
           "op": "lt",
-          "value": 4000000
+          "value": 5000000
         }
       ],
       "timeFrom": null,
@@ -278,6 +316,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:880",
           "decimals": null,
           "format": "bps",
           "label": "Speed",
@@ -287,6 +326,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:881",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -305,7 +345,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${DS_PROMETHEUS}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -404,7 +444,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "${DS_PROMETHEUS}",
       "decimals": null,
       "fieldConfig": {
         "defaults": {
@@ -500,7 +540,7 @@
       }
     },
     {
-      "datasource": null,
+      "datasource": "${DS_PROMETHEUS}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -709,22 +749,27 @@
               "__name__": true,
               "instance": true,
               "job": true,
-              "servername": false,
+              "serverid": true,
+              "servername": true,
+              "shareurl": true,
               "speedtest_servername_info{instance=\"192.168.1.9:9469\", job=\"Speedtest\", servername=\"NOS - Porto\"}": false
             },
             "indexByName": {
               "Time": 0,
-              "Value #A": 7,
-              "Value #B": 8,
-              "Value #C": 9,
-              "Value #D": 3,
-              "Value #E": 11,
-              "__name__": 4,
-              "instance": 5,
-              "job": 6,
+              "Value #A": 9,
+              "Value #B": 10,
+              "Value #C": 11,
+              "Value #D": 5,
+              "Value #E": 13,
+              "__name__": 6,
+              "instance": 7,
+              "job": 8,
               "serverid": 1,
-              "servername": 2,
-              "shareurl": 10
+              "servername": 4,
+              "shareurl": 12,
+              "speedtest_serverid": 2,
+              "speedtest_servername": 3,
+              "speedtest_shareurl": 14
             },
             "renameByName": {
               "Value #A": "Uploaded Bytes",
@@ -733,9 +778,12 @@
               "Value #D": "",
               "instance": "Instance",
               "job": "Job",
-              "serverid": "SpeedTest Server ID",
-              "servername": "SpeedTest Server Name",
-              "shareurl": "Share URL"
+              "serverid": "",
+              "servername": "",
+              "shareurl": "",
+              "speedtest_serverid": "SpeedTest Server ID",
+              "speedtest_servername": "SpeedTest Server Name",
+              "speedtest_shareurl": "Share URL"
             }
           }
         }
@@ -743,6 +791,7 @@
       "type": "table"
     }
   ],
+  "refresh": "30m",
   "schemaVersion": 25,
   "style": "dark",
   "tags": [],
@@ -769,5 +818,5 @@
   "timezone": "",
   "title": "Internet Speed",
   "uid": "MBmaYd9Wk",
-  "version": 11
+  "version": 16
 }
