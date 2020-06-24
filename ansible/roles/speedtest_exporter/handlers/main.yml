@@ -1,5 +1,5 @@
 ---
-- name: systemd node_exporter
+- name: systemd speedtest_exporter
   systemd:
     name: speedtest_exporter
     state: restarted
