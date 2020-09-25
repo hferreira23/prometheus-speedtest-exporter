@@ -129,4 +129,3 @@ config.yml
 ```
 
 to the files directory inside the role.
-
