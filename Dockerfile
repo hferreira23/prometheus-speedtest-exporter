@@ -1,0 +1,24 @@
+FROM python:slim as base
+
+FROM base as builder
+
+RUN apt update && \
+    apt install gcc -y && \
+    python3 -m pip install  --prefix="/build" prometheus_client uwsgi
+
+FROM base
+
+RUN apt update && \
+    apt install curl bash -y && \
+    curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | bash && \
+    apt install speedtest -y && \
+    mkdir -p /app/speedtest_exporter && \
+    rm -rf /var/cache/*
+
+COPY --from=builder /build /usr/local
+COPY speedtest_exporter.ini /app/speedtest_exporter/speedtest_exporter.ini
+COPY speedtest_exporter.py /app/speedtest_exporter/speedtest_exporter.py
+
+EXPOSE 9469
+
+CMD ["uwsgi", "--ini", "/app/speedtest_exporter/speedtest_exporter.ini"]
