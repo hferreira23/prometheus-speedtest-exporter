@@ -1,10 +1,11 @@
-FROM python:slim as base
+FROM python:3.11-slim as base
 
 FROM base as builder
 
 RUN apt update && \
-    apt install gcc -y && \
-    python3 -m pip install  --prefix="/build" prometheus_client uwsgi
+    apt install gcc -y
+
+RUN python3 -m pip install  --prefix="/build" prometheus_client uwsgi
 
 FROM base
 
