@@ -1,6 +1,6 @@
-FROM python:3.12-slim as base
+FROM python:3.12-slim AS base
 
-FROM base as builder
+FROM base AS builder
 
 RUN apt update && \
     apt install gcc -y
