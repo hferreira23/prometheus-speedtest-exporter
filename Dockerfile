@@ -1,4 +1,4 @@
-FROM python:3.11-slim as base
+FROM python:3.12-slim as base
 
 FROM base as builder
 
@@ -14,7 +14,8 @@ RUN apt update && \
     curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | bash && \
     apt install speedtest -y && \
     mkdir -p /app/speedtest_exporter && \
-    rm -rf /var/cache/*
+    rm -rf /var/cache/* && \
+    sync
 
 COPY --from=builder /build /usr/local
 COPY speedtest_exporter.ini /app/speedtest_exporter/speedtest_exporter.ini
