@@ -14,7 +14,7 @@ RUN apt update && \
     curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | bash && \
     apt install speedtest -y && \
     mkdir -p /app/speedtest_exporter && \
-    rm -rf /var/cache/* && \
+    rm -rf /var/cache/* /tmp/* /var/tmp/* /var/lib/apt/lists/* /var/log/* && \
     sync
 
 COPY --from=builder /build /usr/local
